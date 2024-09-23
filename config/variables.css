@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Averia+Sans+Libre&display=swap');
+
+:root {
+    --header-background-color: #424874;
+    --header-text-color: #ffffff;
+    --hover-background-color: #fff44f;
+    --body-background-color: #e6e2f5;
+    --body-text-color: #000000;
+
+    --header-font: "Averia Sans Libre";
+    --body-font: Helvetica, sans-serif;
+}

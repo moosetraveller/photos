@@ -1,0 +1,75 @@
+<select #folderSelect class="folder-selector" (change)="onFolderChanged(folderSelect.value)" [value]="this.selectedFolder()">
+
+    @for (folder of folders(); track $index) {
+        <option [value]="folder">{{folder}}</option>
+    }
+
+</select>
+
+<div #photoAlbum class="photo-album">
+
+    @for (photo of photos().images; track $index) {
+        <div class="photo-container">
+            <img class="photo" [src]="photo" width="100%" loading="lazy" (load)="onImageLoaded($event)">
+        </div>
+    }
+    @empty {
+        @defer (on timer(500)) {
+            <div class="photo-container no-photos">
+                <b>No photos in {{photos().folder}}</b>. 
+                Please select another folder.
+            </div>
+        }
+        @defer (on timer(2000)) {
+            <div class="loading-panel">
+                Loading ...
+            </div>
+        }
+    }
+
+</div>
+
+<div class="paginator">
+
+    <select #pageSizeSelect class="page-size-selector" (change)="onPageSizeChanged(pageSizeSelect.value)" [value]="pageSize()">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+    </select>
+
+    <div class="page-selector">
+        <button class="page-selection" (click)="changePage(page()-1)" [disabled]="page() <= 1">Previous</button>
+        <button class="page-selection" (click)="changePage(page()+1)" [disabled]="page() >= photos().totalPages">Next</button>
+    </div>
+
+    <div class="page-selector">
+    
+        @if(page() > 1 && !photos().previousPages.includes(1)) {
+            <button class="page-selection" (click)="changePage(1)">1</button>
+        }
+        @if(page() > 2 && !photos().previousPages.includes(2)) {
+            <button class="page-selection place-selection-placeholder" disabled>...</button>
+        }
+
+        @for(page of photos().previousPages; track $index) {
+            <button class="page-selection" (click)="changePage(page)">{{page}}</button>
+        }
+        <button class="page-selection current-page" disabled>{{page()}}</button>
+        @for(page of photos().nextPages; track $index) {
+            <button class="page-selection" (click)="changePage(page)">{{page}}</button>
+        }
+
+        @if(page() < photos().totalPages-1 && !photos().nextPages.includes(photos().totalPages-1)) {
+            <button class="page-selection place-selection-placeholder" disabled>...</button>
+        }
+        @if(page() < photos().totalPages && !photos().nextPages.includes(photos().totalPages)) {
+            <button class="page-selection" (click)="changePage(photos().totalPages)">{{photos().totalPages}}</button>
+        }
+
+    </div>
+
+    <div class="page-selector" style="display: grid; align-content: center;">
+        {{photos().total}} image(s)
+    </div>
+
+</div>
