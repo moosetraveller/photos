@@ -40,7 +40,11 @@
                 "input": "config",
                 "output": "config"
               },
-              "src/api"
+              {
+                "glob": "**/*",
+                "input": "api",
+                "output": "api"
+              }
             ],
             "styles": [
               "src/styles.scss"
