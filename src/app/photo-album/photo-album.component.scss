@@ -73,13 +73,13 @@ img.photo {
 }
 
 @media (max-width: 800px) {
-    .photo-container {
+    .photo-album .photo-container {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 500px) {
-    .photo-container {
+    .photo-album .photo-container {
         grid-template-columns: 1fr;
     }
 }
@@ -103,21 +103,37 @@ img.photo {
 
 }
 
-.photo-container {
+.photo-container, .photo-dialog {
 
     position: relative;
 
     .photo-tool-container {
 
         position: absolute;
-        top: 0;
-        right: 0;
+    
+        &.top, &:not(.bottom) {
+            top: 0;
+        }
+
+        &.bottom {
+            bottom: 0;
+        }
+
+        &.left {
+            left: 0;
+        }
+
+        &.right, &:not(.left) {
+            right: 0;
+        }
 
         opacity: 0.4;
 
-        display: grid;
-        align-items: center;
-        grid-template-columns: min-content min-content;
+        &:not([hidden]) {
+            display: grid;
+            align-items: center;
+            grid-template-columns: min-content min-content;
+        }
 
         a.photo-tool  {
 
@@ -136,22 +152,54 @@ img.photo {
 
     }
 
-    &:hover {
-
+    img:hover {
         cursor: pointer;
-        
-        .photo-tool-container {
+    }
+    
+    img:hover ~ .photo-tool-container, .photo-tool-container:hover {
             
-            opacity: 0.8;
+        opacity: 0.8;
+        cursor: pointer;
 
-            &:not(:has(.photo-tool:not(.open-tool):hover)) {
-                .photo-tool.open-tool {
-                    background-color: var(--hover-background-color);
-                }
+        &:not(:has(.photo-tool:not(.open-tool):hover)) {
+            .photo-tool.open-tool {
+                background-color: var(--hover-background-color);
             }
-
         }
 
+    }
+
+}
+
+
+.photo-dialog {
+
+    &:focus-visible {
+        outline: none;
+    }
+    
+    .photo-tool-container {
+    
+        &.top, &:not(.bottom) {
+            top: var(--photo-dialog-margin);
+        }
+
+        &.bottom {
+            bottom: var(--photo-dialog-margin);
+        }
+
+        &.left {
+            left: var(--photo-dialog-margin);
+        }
+
+        &.right, &:not(.left) {
+            right: var(--photo-dialog-margin);
+        }
+    
+    }
+
+    img:hover {
+        cursor: default !important;
     }
 
 }

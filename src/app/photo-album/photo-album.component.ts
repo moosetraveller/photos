@@ -118,6 +118,10 @@ export class PhotoAlbumComponent {
     this.photoDialog.nativeElement?.showModal();
   }
 
+  hasNextPhoto(): boolean {
+    return this.openedPhoto() < this.photos().images.length-1 || this.page() < this.photos().totalPages;
+  }
+
   nextPhoto(): void {
     if (this.photoDialog.nativeElement?.open) {
       const index = this.openedPhoto();
@@ -129,6 +133,10 @@ export class PhotoAlbumComponent {
       }
       this.openedPhoto.set(index+1);
     }
+  }
+
+  hasPreviousPhoto(): boolean {
+    return this.openedPhoto() > 0 || this.page() > 1;
   }
 
   previousPhoto(): void {
