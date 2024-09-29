@@ -49,7 +49,11 @@ function get_images($folder, $page, $page_size)
     $images = glob("$path/*.{jpg,jpeg,png,gif,bmp}", GLOB_BRACE);
 
     usort($images, function($a, $b) {
-        return filectime($a) - filectime($b);
+        $diff = filectime($a) - filectime($b);
+        if ($diff == 0) {
+            return strcmp(basename($a), basename($b));
+        }
+        return $diff;
     });
 
     $total = count($images);
