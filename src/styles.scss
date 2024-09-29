@@ -10,6 +10,18 @@ body {
     font-size: 0.9rem;
 }
 
+body:has(dialog[open]) {
+    overflow: hidden;
+}
+
+dialog:not([open]) {
+    display: none !important;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 select {
     -webkit-appearance: none;
     -moz-appearance: none;

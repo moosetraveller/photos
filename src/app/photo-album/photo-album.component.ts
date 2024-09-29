@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, computed, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 
 type RequestResult = {
@@ -25,6 +25,9 @@ export class PhotoAlbumComponent {
   @ViewChild('photoAlbum')
   photoAlbum: ElementRef = null!
 
+  @ViewChild('photoDialog')
+  photoDialog: ElementRef = null!;
+
   page = signal(1);
   pageSize = signal(10);
 
@@ -40,6 +43,8 @@ export class PhotoAlbumComponent {
     nextPages: [],
     previousPages: [],
   });
+
+  openedPhoto = signal<number>(null!);
 
   folders = signal<Array<string>>([]);
 
@@ -62,8 +67,19 @@ export class PhotoAlbumComponent {
       
       this.httpClient.get(`api/photos.php?${queryString}`)
         .subscribe(photos => {
+
           this.photos.set(photos as RequestResult);
           element.classList.remove('loading');
+
+          if (this.photoDialog.nativeElement?.open) {
+            if (this.openedPhoto() == 0) {
+              this.openedPhoto.set(this.photos().images.length-1);
+            }
+            else {
+              this.openedPhoto.set(0);
+            }
+          }
+
         });
   
     });
@@ -86,6 +102,58 @@ export class PhotoAlbumComponent {
   onImageLoaded(event: Event) {
     const element = event.target as HTMLImageElement;
     element.style.opacity = '1'
+  }
+
+  download(photo: string, event: MouseEvent): void {
+    
+    event.preventDefault();
+    event.stopPropagation();
+    
+    console.log('download');
+
+  }
+
+  open(photoIndex: number): void {
+    this.openedPhoto.set(photoIndex);
+    this.photoDialog.nativeElement?.showModal();
+  }
+
+  nextPhoto(): void {
+    if (this.photoDialog.nativeElement?.open) {
+      const index = this.openedPhoto();
+      if (index == this.photos().images.length-1) {
+        if (this.page() < this.photos().totalPages) {
+          this.page.set(this.page()+1);
+        }
+        return;
+      }
+      this.openedPhoto.set(index+1);
+    }
+  }
+
+  previousPhoto(): void {
+    if (this.photoDialog.nativeElement?.open) {
+      const index = this.openedPhoto();
+      if (index == 0) {
+        if (this.page() != 1) {
+          this.page.set(this.page()-1);
+        }
+        return;
+      }
+      this.openedPhoto.set(index-1);
+    }
+  }
+
+  navigate(event: KeyboardEvent): void {
+
+    switch (event.key) {
+      case 'ArrowRight':
+        this.nextPhoto();
+        return;
+      case 'ArrowLeft':
+        this.previousPhoto();
+        return
+    }
   }
   
 }

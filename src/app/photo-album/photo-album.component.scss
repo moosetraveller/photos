@@ -83,3 +83,75 @@ img.photo {
         grid-template-columns: 1fr;
     }
 }
+
+.photo-dialog {
+
+    --photo-dialog-margin: 1rem;
+
+    max-height: calc(100vh - calc(var(--photo-dialog-margin) * 4));
+    padding: 1rem;
+    border: none;
+    margin: var(--photo-dialog-margin) auto;
+
+    display: grid;
+    align-content: center;
+
+    img {
+        max-height: calc(100vh - calc(var(--photo-dialog-margin) * 4) - 4px);
+        max-width: calc(100vw - calc(var(--photo-dialog-margin) * 4) - 4px);
+    }
+
+}
+
+.photo-container {
+
+    position: relative;
+
+    .photo-tool-container {
+
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        opacity: 0.4;
+
+        display: grid;
+        align-items: center;
+        grid-template-columns: min-content min-content;
+
+        a.photo-tool  {
+
+            display: grid;
+            align-content: center;
+            
+            padding: 0.5rem;
+            border-color: var(--border-color);
+            background-color: var(--header-text-color);
+
+            &:hover {
+                background-color: var(--hover-background-color);
+            }
+
+        }
+
+    }
+
+    &:hover {
+
+        cursor: pointer;
+        
+        .photo-tool-container {
+            
+            opacity: 0.8;
+
+            &:not(:has(.photo-tool:not(.open-tool):hover)) {
+                .photo-tool.open-tool {
+                    background-color: var(--hover-background-color);
+                }
+            }
+
+        }
+
+    }
+
+}
