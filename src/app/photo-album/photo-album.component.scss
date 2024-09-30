@@ -69,7 +69,6 @@
 
 img.photo {
     opacity: 0;
-    transition: opacity 2s ease-in-out;
 }
 
 @media (max-width: 800px) {
@@ -88,7 +87,8 @@ img.photo {
 
     --photo-dialog-margin: 1rem;
 
-    max-height: calc(100vh - calc(var(--photo-dialog-margin) * 4));
+    max-height: calc(100vh - (var(--photo-dialog-margin) * 4));
+
     padding: 1rem;
     border: none;
     margin: var(--photo-dialog-margin) auto;
@@ -97,8 +97,21 @@ img.photo {
     align-content: center;
 
     img {
-        max-height: calc(100vh - calc(var(--photo-dialog-margin) * 4) - 4px);
-        max-width: calc(100vw - calc(var(--photo-dialog-margin) * 4) - 4px);
+        max-height: calc(100vh - (var(--photo-dialog-margin) * 4) - 4px);
+        max-width: calc(100vw - (var(--photo-dialog-margin) * 4) - 4px);
+    }
+
+}
+
+.photo-container {
+    
+    opacity: 0;
+    visibility: hidden;
+        
+    &:has(.photo.loaded) {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 2s ease-in-out;
     }
 
 }

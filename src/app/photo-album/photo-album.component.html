@@ -44,7 +44,7 @@
 
 <div #photoAlbum class="photo-album">
 
-    @for (photo of photos().images; track $index) {
+    @for (photo of photos().images; track photo) {
         <div class="photo-container" (click)="open($index)">
             <img class="photo" [src]="photo" width="100%" loading="lazy" (load)="onImageLoaded($event)">
             <div class="photo-tool-container top right">

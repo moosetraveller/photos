@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 
 type RequestResult = {
@@ -20,7 +20,7 @@ type RequestResult = {
   templateUrl: './photo-album.component.html',
   styleUrl: './photo-album.component.scss'
 })
-export class PhotoAlbumComponent {
+export class PhotoAlbumComponent implements AfterViewInit {
 
   @ViewChild('photoAlbum')
   photoAlbum: ElementRef = null!
@@ -101,15 +101,27 @@ export class PhotoAlbumComponent {
 
   onImageLoaded(event: Event) {
     const element = event.target as HTMLImageElement;
-    element.style.opacity = '1'
+    element.style.opacity = '1';
+    element.classList.add('loaded');
   }
 
   download(photo: string, event: MouseEvent): void {
     
     event.preventDefault();
     event.stopPropagation();
+
+    const fileName = photo
+      .replace(/\\/g, '/')
+      .split('/')
+      .pop();
     
-    console.log('download');
+    const element = document.createElement("a");
+    element.setAttribute("href", photo);
+    element.setAttribute("download", fileName!);
+    element.style.display = "none";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
 
   }
 
@@ -162,6 +174,10 @@ export class PhotoAlbumComponent {
         this.previousPhoto();
         return
     }
+  
   }
   
+  ngAfterViewInit(): void {
+  }
+
 }
