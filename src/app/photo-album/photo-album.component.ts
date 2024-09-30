@@ -178,6 +178,20 @@ export class PhotoAlbumComponent implements AfterViewInit {
   }
   
   ngAfterViewInit(): void {
+
+    const dialogElement = this.photoDialog.nativeElement;
+    
+    dialogElement.addEventListener("click", (event: MouseEvent) => {
+
+      const {clientX, clientY} = event;
+      const {left, right, top, bottom} = dialogElement.getBoundingClientRect()
+    
+      if (clientX < left || clientX > right || clientY < top  || clientY > bottom) {
+        dialogElement.close();
+      }
+    
+    });
+
   }
 
 }
